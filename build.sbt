@@ -1,23 +1,27 @@
-crossScalaVersions := Seq("2.10.4", "2.11.8", "2.12.0")
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-val autowire = crossProject.settings(
+crossScalaVersions := Seq("2.11.12", "2.12.6")
+
+val autowire = crossProject(JSPlatform, JVMPlatform)
+.crossType(CrossType.Full)
+.settings(
   organization := "com.lihaoyi",
 
-  version := "0.2.6",
+  version := "0.2.6-KH",
   name := "autowire",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.12",
   autoCompilerPlugins := true,
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.5"),
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "acyclic" % "0.1.5" % "provided",
-    "com.lihaoyi" %%% "utest" % "0.4.4" % "test",
+    "com.lihaoyi" %%% "utest" % "0.6.5-KH" % "test",
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    "com.lihaoyi" %%% "upickle" % "0.4.4" % "test"
+    "com.lihaoyi" %%% "upickle" % "0.6.6-KH" % "test"
   ) ++ (
     if (!scalaVersion.value.startsWith("2.10.")) Nil
     else Seq(
-      compilerPlugin("org.scalamacros" % s"paradise" % "2.0.0" cross CrossVersion.full),
-      "org.scalamacros" %% s"quasiquotes" % "2.0.0"
+      compilerPlugin("org.scalamacros" % s"paradise" % "2.1.0" cross CrossVersion.full),
+      "org.scalamacros" %% s"quasiquotes" % "2.1.0"
     )
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
